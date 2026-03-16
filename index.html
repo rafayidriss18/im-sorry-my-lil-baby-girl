@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanisha's Adventure ❤️</title>
+    <style>
+        :root {
+            --pink: #ff4d6d;
+            --soft-pink: #ffccd5;
+            --deep-red: #c9184a;
+            --overlay: rgba(0, 0, 0, 0.5);
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #000; overflow: hidden;
+        }
+
+        /* Animated Background Gradient */
+        #game-container {
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center;
+            background: linear-gradient(45deg, #1a1a1a, #2c0211, #1a1a1a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            transition: all 1s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute; color: var(--pink);
+            font-size: 20px; animation: floatUp 4s linear forwards;
+            z-index: 10; pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        #stats {
+            position: absolute; top: 30px;
+            background: rgba(255, 77, 109, 0.2);
+            padding: 10px 30px; border-radius: 50px;
+            border: 2px solid var(--pink);
+            color: white; font-weight: bold; font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--pink);
+            z-index: 100;
+        }
+
+        #character-box {
+            display: flex; width: 100%; justify-content: space-around;
+            align-items: flex-end; padding-bottom: 20px;
+            max-width: 900px;
+        }
+
+        .avatar {
+            width: 250px; height: auto; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+        }
+
+        /* Avatar States */
+        .bounce { transform: translateY(-40px) scale(1.1); }
+        .blush { filter: drop-shadow(0 0 25px var(--pink)) saturate(1.5); transform: scale(1.05); }
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        #dialogue-box {
+            width: 90%; max-width: 850px;
+            background: rgba(15, 15, 15, 0.95);
+            border: 3px solid var(--pink);
+            border-top-left-radius: 30px; border-top-right-radius: 30px;
+            padding: 40px; box-sizing: border-box;
+            box-shadow: 0 -10px 40px rgba(255, 77, 109, 0.4);
+            z-index: 100;
+        }
+
+        #text {
+            font-size: 1.4rem; color: #fff; line-height: 1.6;
+            margin-bottom: 25px; min-height: 100px; font-weight: 300;
+        }
+
+        #options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        button {
+            background: rgba(255, 77, 109, 0.1); border: 1px solid var(--pink);
+            color: white; padding: 15px; border-radius: 12px;
+            cursor: pointer; transition: 0.3s; font-size: 1rem;
+        }
+
+        button:hover {
+            background: var(--pink); box-shadow: 0 0 20px var(--pink);
+            transform: translateY(-3px);
+        }
+
+        #overlay-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000;
+            justify-content: center; align-items: center; flex-direction: column;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay-screen">
+        <h1 style="color: var(--pink); font-size: 3rem;">WINNER! 🏆</h1>
+        <p id="reward-text" style="color: white; font-size: 1.5rem; max-width: 80%;"></p>
+        <button onclick="location.reload()" style="margin-top: 20px;">Play Again, My Love</button>
+    </div>
+
+    <div id="game-container">
+        <div id="stats">💖 Heart Points: <span id="heart-count">0</span></div>
+        
+        <div id="character-box">
+            <img id="player-avatar" class="avatar" src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Starfish&backgroundColor=b6e3f4" alt="Starfishy">
+            <img id="tanisha-avatar" class="avatar" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Tanisha&backgroundColor=ffdfbf" alt="Tanisha">
+        </div>
+
+        <div id="dialogue-box">
+            <div id="text">...</div>
+            <div id="options"></div>
+        </div>
+    </div>
+
+<script>
+    let hearts = 0;
+    const gameData = [
+        { id: 0, text: "The screen is dark. A message pops up from 'Starfishy'. Tanisha, do you open it?", options: [{ text: "Open it (See what this idiot wants)", hearts: 10, next: 1 }] },
+        { id: 1, text: "Meri Jaan... I know I was a starfish and ignored you. My brain stalled. Can you forgive your favorite idiot?", options: [{ text: "Maybe, if you admit you're a dork.", hearts: 20, next: 2, anim: 'bounce' }, { text: "Keep talking, Starfish.", hearts: 10, next: 2 }] },
+        { id: 2, text: "I promise I wasn't ignoring you on purpose. I was just being a dumb Starfishy. You're Mera Dil, remember?", options: [{ text: "You're lucky you're cute.", hearts: 30, next: 3, anim: 'blush' }, { text: "Still listening...", hearts: 10, next: 3 }] },
+        { id: 3, text: "How is my Lil Penguin doing today? Did you miss your annoying Starfishy even a little bit?", options: [{ text: "A little bit.", hearts: 25, next: 4, anim: 'bounce' }, { text: "Not at all (Lying).", hearts: 15, next: 4, anim: 'shake' }] },
+        { id: 4, text: "Remember the first time I called you Meri Zindigi? I meant it then, and I mean it more now.", options: [{ text: "That was sweet.", hearts: 30, next: 5, anim: 'blush' }] },
+        { id: 5, text: "I know I’m an idiot sometimes. What’s my most annoying habit that you secretly love?", options: [{ text: "Being a starfish.", hearts: 20, next: 6 }, { text: "Being a dork.", hearts: 20, next: 6 }] },
+        { id: 6, text: "I want to be better for you. Because you’re my baby girl. My everything. My Sab Kuch.", options: [{ text: "Prove it.", hearts: 20, next: 7 }] },
+        { id: 7, text: "If I could take you anywhere right now, we'd travel the whole world together. Where first?", options: [{ text: "Paris (The City of Love)", hearts: 40, next: 8 }, { text: "The Maldives (Beach vibes)", hearts: 40, next: 8 }] },
+        { id: 8, text: "Imagine us on a plane. No phones, no distractions. Just me and my Lil Penguin flying over the ocean.", options: [{ text: "I'd love that.", hearts: 50, next: 9, anim: 'bounce' }] },
+        { id: 9, text: "We’re going everywhere. Tokyo, London, Italy... because the world is too small for how much I love you.", options: [{ text: "Take me there!", hearts: 30, next: 10 }] },
+        { id: 10, text: "Halfway through the world tour! You’ve earned enough points for a massive hug.", options: [{ text: "Claim Hug Now.", hearts: 100, next: 11, anim: 'bounce' }] },
+        { id: 11, text: "Tanisha, you’re the only person who can call me a dumb idiot and make me smile.", options: [{ text: "Because it's true!", hearts: 20, next: 12 }] },
+        { id: 12, text: "We're under the stars in Santorini. I lean in and whisper: You are my Sab Kuch.", options: [{ text: "Lean in closer...", hearts: 60, next: 13, anim: 'blush' }] },
+        { id: 13, text: "I promise to never let you feel ignored again. You’re my Lil Baby Girl, and you deserve 100% of me.", options: [{ text: "You better stay that way.", hearts: 30, next: 14 }] },
+        { id: 14, text: "If anyone ever bothers my Lil Penguin, they have to deal with this Starfish first!", options: [{ text: "My hero (Lol).", hearts: 20, next: 15, anim: 'bounce' }] },
+        { id: 15, text: "Where do you see us in 5 years? Still traveling the world?", options: [{ text: "Yes, forever with you.", hearts: 100, next: 16, anim: 'blush' }] },
+        { id: 16, text: "Sometimes I stare at your pictures and forget what I was doing. That’s why I’m a dumb idiot.", options: [{ text: "That's actually cute.", hearts: 30, next: 17 }] },
+        { id: 17, text: "The sun is setting on our digital adventure. But our real adventure is just beginning.", options: [{ text: "I'm ready.", hearts: 30, next: 18 }] },
+        { id: 18, text: "Tanisha, Meri Jaan, do you forgive your Starfishy?", options: [{ text: "Yes, I forgive you.", hearts: 200, next: 19, anim: 'bounce' }, { text: "Give me a kiss first.", hearts: 300, next: 19, anim: 'blush' }] },
+        { id: 19, text: "VICTORY! You've officially won back your Starfishy. Ready for your reward?", options: [{ text: "Show me!", hearts: 0, next: 20 }] },
+        { id: 20, text: "The reward is ME. And a real-life dinner date wherever you want. I love you forever.", options: [{ text: "END ADVENTURE", hearts: 0, next: 'FINISH' }] }
+    ];
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+    }
+
+    function updateGame(actId) {
+        if (actId === 'FINISH') {
+            document.getElementById('overlay-screen').style.display = 'flex';
+            document.getElementById('reward-text').innerText = `You finished with ${hearts} Heart Points! Tanisha, you are Meri Jaan, and I'm the luckiest dork alive. I'm taking you to dinner ASAP!`;
+            return;
+        }
+
+        const act = gameData.find(a => a.id === actId);
+        const textEl = document.getElementById('text');
+        const optionsEl = document.getElementById('options');
+        const tanishaAvatar = document.getElementById('tanisha-avatar');
+        
+        tanishaAvatar.className = 'avatar';
+        textEl.innerText = "";
+        let i = 0;
+        const type = () => { if (i < act.text.length) { textEl.innerText += act.text[i++]; setTimeout(type, 30); } };
+        type();
+
+        optionsEl.innerHTML = '';
+        act.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt.text;
+            btn.onclick = () => {
+                hearts += opt.hearts;
+                document.getElementById('heart-count').innerText = hearts;
+                if (opt.anim) tanishaAvatar.classList.add(opt.anim);
+                for(let h=0; h<5; h++) setTimeout(createHeart, h*100);
+                setTimeout(() => updateGame(opt.next), 800);
+            };
+            optionsEl.appendChild(btn);
+        });
+    }
+
+    updateGame(0);
+</script>
+</body>
+</html>
