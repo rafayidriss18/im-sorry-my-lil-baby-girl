@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --pink: #ffccd5; /* Baby Pink */
-            --yellow: #fff8e1; /* Light Yellow */
-            --glass: rgba(255, 255, 255, 0.95); /* White glass */
-            --border: rgba(255, 204, 213, 1); /* Pink border */
+            --pink: #ffccd5;
+            --yellow: #fff8e1;
+            --glass: rgba(255, 255, 255, 0.95);
+            --border: rgba(255, 204, 213, 1);
             --text: #333;
         }
 
@@ -20,146 +20,112 @@
             color: var(--text);
         }
 
-        /* Flower Border Container */
+        /* Fixed Background Layer */
+        #bg-layer {
+            position: fixed; inset: 0;
+            background-size: cover; background-position: center;
+            transition: background-image 1.5s ease-in-out;
+            z-index: -1; filter: brightness(0.7);
+        }
+
         #game-wrapper {
             height: 100vh; display: flex; flex-direction: column;
             justify-content: space-between; align-items: center;
             padding: 20px; box-sizing: border-box;
-            position: relative;
-            background-image: 
-                url('https://i.postimg.cc/mD8zM1vW/flower-corner-tr.png'),
-                url('https://i.postimg.cc/Wb7F2pT5/flower-corner-bl.png'),
-                url('https://i.postimg.cc/q7V1Lp30/sunflower-side.png'),
-                url('https://i.postimg.cc/q7V1Lp30/sunflower-side.png');
-            background-position: top right, bottom left, top left, bottom right;
-            background-repeat: no-repeat;
-            background-size: 300px, 300px, 150px, 150px;
+            position: relative; z-index: 1;
         }
 
-        /* Sunflower Rain Animation */
+        /* Sunflower Rain */
         .flower {
-            position: absolute;
-            width: 50px; height: 50px;
-            background-image: url('https://i.postimg.cc/6qfL9D1r/sunflower-icon.png');
+            position: absolute; width: 40px; height: 40px;
+            background-image: url('https://www.pngplay.com/wp-content/uploads/12/Sunflower-Transparent-Images.png');
             background-size: cover;
             animation: flowerFall 8s linear infinite;
-            z-index: 0;
-            opacity: 0.6;
+            z-index: 0; pointer-events: none;
         }
 
         @keyframes flowerFall {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.6; }
+            20% { opacity: 0.8; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* White/Pink Stats Bar */
         #stats-bar {
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px);
-            padding: 10px 25px; border-radius: 50px; border: 2px solid var(--border);
-            color: #ff8fa3; font-weight: 600; font-size: 1.1rem;
-            box-shadow: 0 0 15px rgba(255, 77, 109, 0.1);
-            position: relative; z-index: 10;
+            background: white; padding: 10px 25px; border-radius: 50px;
+            border: 2px solid var(--border); color: #ff758f; font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* Avatar Styling - White/Pink Frames */
         .character-container {
-            display: flex; gap: 40px; align-items: center; justify-content: center;
-            width: 100%; margin-bottom: 20px; position: relative; z-index: 10;
+            display: flex; gap: 30px; align-items: center; justify-content: center;
+            width: 100%; margin: 20px 0;
         }
 
         .avatar-frame {
-            width: 180px; height: 180px; border-radius: 50%;
-            border: 6px solid #fff; overflow: hidden;
-            box-shadow: 0 0 30px rgba(255, 204, 213, 0.5);
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 160px; height: 160px; border-radius: 50%;
+            border: 5px solid white; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(255, 204, 213, 0.8);
             animation: breathe 4s ease-in-out infinite;
         }
 
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
 
         @keyframes breathe {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 204, 213, 0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 204, 213, 0.6); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* Light Dialogue Box */
         #dialogue-container {
-            width: 100%; max-width: 800px;
-            background: var(--glass); backdrop-filter: blur(15px);
-            border: 2px solid var(--border); border-radius: 25px;
-            padding: 30px; box-sizing: border-box;
-            box-shadow: 0 -10px 50px rgba(255, 204, 213, 0.2);
-            margin-bottom: 20px; position: relative; z-index: 10;
+            width: 95%; max-width: 700px; background: var(--glass);
+            border: 2.5px solid var(--border); border-radius: 25px;
+            padding: 25px; box-sizing: border-box;
+            box-shadow: 0 10px 40px rgba(255, 204, 213, 0.3);
+            margin-bottom: 30px;
         }
 
         #name-tag {
             color: #ff758f; font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem; margin-bottom: 10px; display: block;
+            font-size: 2rem; margin-bottom: 5px; display: block;
         }
 
-        #text-content {
-            font-size: 1.1rem; line-height: 1.6; min-height: 90px;
-            margin-bottom: 25px; color: var(--text);
-        }
+        #text-content { font-size: 1.05rem; line-height: 1.5; min-height: 80px; margin-bottom: 20px; }
 
-        /* Bright Option Buttons */
-        #options-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        }
+        #options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .option-btn {
             background: #fff; border: 2px solid var(--border);
-            color: #ff758f; padding: 14px; border-radius: 12px;
-            cursor: pointer; opacity: 0; transform: translateY(15px);
-            transition: all 0.4s; font-size: 0.9rem; font-weight: 600;
+            color: #ff758f; padding: 12px; border-radius: 12px;
+            cursor: pointer; opacity: 0; transition: 0.3s;
+            font-size: 0.85rem; font-weight: 600;
         }
 
-        .option-btn.show { opacity: 1; transform: translateY(0); }
+        .option-btn.show { opacity: 1; }
+        .option-btn:hover { background: var(--pink); color: white; transform: translateY(-3px); }
 
-        .option-btn:hover {
-            background: var(--pink); border-color: #ff758f;
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.3);
-            transform: scale(1.03);
-        }
+        #no-btn { position: fixed; z-index: 9999; }
 
-        #no-btn { position: absolute; z-index: 1000; }
-
-        /* End Screen - Sunflower Theme */
         #end-screen {
-            display: none; position: fixed; inset: 0;
-            background: var(--yellow) url('https://i.postimg.cc/q7V1Lp30/sunflower-side.png') center/cover;
-            z-index: 2000; justify-content: center; align-items: center;
-            text-align: center; flex-direction: column; padding: 20px;
+            display: none; position: fixed; inset: 0; background: var(--yellow);
+            z-index: 10000; justify-content: center; align-items: center;
+            text-align: center; flex-direction: column;
         }
     </style>
 </head>
 <body>
 
-    <script>
-        function createFlower() {
-            const flower = document.createElement('div');
-            flower.classList.add('flower');
-            flower.style.left = Math.random() * 100 + 'vw';
-            flower.style.animationDelay = Math.random() * 5 + 's';
-            document.body.appendChild(flower);
-            // Remove flower after 8s to prevent slowdown
-            setTimeout(() => { flower.remove(); }, 8000);
-        }
-        setInterval(createFlower, 400); // More flowers falling
-    </script>
+    <div id="bg-layer"></div>
 
     <div id="end-screen">
-        <h1 style="color: #ff758f; font-family: 'Dancing Script'; font-size: 4.5rem; text-shadow: 2px 2px 0 #fff;">I love you my perfect girl.</h1>
-        <p style="color: #333; font-size: 1.8rem; background: rgba(255,255,255,0.7); padding: 10px; border-radius: 10px;">Now come here and tell me that you love me more. ❤️🌻</p>
+        <h1 style="color: #ff758f; font-family: 'Dancing Script'; font-size: 4rem;">I love you my perfect girl.</h1>
+        <p style="font-size: 1.5rem;">Now come here and tell me that you love me more. ❤️🌻</p>
     </div>
 
     <div id="game-wrapper">
         <div id="stats-bar">💖 HEARTS: <span id="score">0</span></div>
 
         <div class="character-container">
-            <div class="avatar-frame"><img src="https://i.postimg.cc/85Mscs0g/me.png" alt="Me"></div>
-            <div class="avatar-frame"><img src="https://i.postimg.cc/50tXhL0N/tanisha.png" alt="Tanisha"></div>
+            <div class="avatar-frame"><img src="https://i.ibb.co/XfqmF3H1/42697.jpg" alt="Me"></div>
+            <div class="avatar-frame"><img src="https://i.ibb.co/FkYmYyM7/35401.jpg" alt="Tanisha"></div>
         </div>
 
         <div id="dialogue-container">
@@ -171,78 +137,47 @@
 
 <script>
     let score = 0;
-    // ... (GameData and loadAct script remains the same as previous masterpiece)
     const gameData = [
-        { text: "Tanisha... Meri Jaan... are you really mad at your favorite dumb idiot? I've been a total starfish lately.", bg: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200", 
-          options: ["Open the message", "Call him a dumb idiot", "Sigh and listen", "Open it just to bully him"] },
-        
-        { text: "I know I messed up and I'm a complete dumbass idiot for that. ap Mera Dil hai, you deserve 100% of me.", bg: "https://images.unsplash.com/photo-1516339901600-2e1a62dc0c45?w=1200", 
-          options: ["Damn right I do", "Say 'I'm a starfish'", "You're lucky you're mine", "You're still an idiot"] },
-
-        { text: "How is my Lil Penguin doing? Did you know you're the most beautiful girl in the world even when you're mad?", bg: "https://images.unsplash.com/photo-1507502707541-f369a3b18502?w=1200", 
-          options: ["I know I am", "Stop flirting, dumbass", "Keep going...", "Maybe a little bit"] },
-
-        { text: "I miss you calling me baby. My life is boring without my Lil Baby Girl bossing me around.", bg: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200", 
-          options: ["I'm the boss forever", "I miss you too", "Shut up, starfish", "Pay attention then"] },
-
-        { text: "Remember our first memory? I realised then that you were My everything. My Sab Kuch.", bg: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?w=1200", 
-          options: ["That was sweet", "You're a dumb idiot", "I remember", "My Sab Kuch"] },
-
-        { text: "I'm a dumb idiot, but I'm YOUR dumb idiot. Can we make a deal to never be mad for long?", bg: "https://images.unsplash.com/photo-1535905590362-38751f1515df?w=1200", 
-          options: ["Deal", "Maybe if you're good", "10 minute limit", "I'll think about it"] },
-
-        { text: "If I could, I'd fly us to Paris right now just to see you smile. Would you let me hold your hand?", bg: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200", 
-          options: ["Yes, please", "Maybe in Paris", "Hold it now", "Quiet, starfish"] },
-
-        { text: "Next stop: Italy! We'd eat pizza and I'd stare at you the whole time like a crazy person.", bg: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=1200", 
-          options: ["That's creepy lol", "I love pizza", "Stare at me more", "Take me there!"] },
-
-        { text: "Then Tokyo! We'd see the neon lights, but you'd be the brightest thing there, Meri Jaan.", bg: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=1200", 
-          options: ["Smooth...", "I love Tokyo", "Buy me everything", "You're so cheesy"] },
-
-        { text: "We'd travel the whole world together. Every country, every city, as long as I'm with my Lil Penguin.", bg: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200", 
-          options: ["Everywhere?", "Promise?", "Just us two", "Pack your bags"] },
-
-        { text: "Halfway mark! You've been so patient with this starfish. Do you like this surprise so far?", bg: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200", 
-          options: ["I love it", "It's okay", "You're trying", "Best surprise ever"] },
-
-        { text: "I stare at your pictures and literally forget how to breathe. I'm such a dumb idiot for you.", bg: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1200", 
-          options: ["Don't die lol", "Aww baby", "I do that too", "Keep breathing!"] },
-
-        { text: "You're my perfect girl. Everything about you—your smile, your laugh, your sass—is my favorite.", bg: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200", 
-          options: ["Even the sass?", "Tell me more", "I'm the best", "Love you too"] },
-
-        { text: "What's one thing you want to do with your Starfishy as soon as you see him?", bg: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200", 
-          options: ["Giant hug", "Big kiss", "Smack you", "Eat food"] },
-
-        { text: "I promise to always be your protector. No one messes with my Lil Baby Girl. Ever.", bg: "https://images.unsplash.com/photo-1505481710153-605175282460?w=1200", 
-          options: ["My hero", "So brave", "I'm tough too", "Protect me always"] },
-
-        { text: "You are my Sab Kuch. My world starts and ends with you, Tanisha.", bg: "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=1200", 
-          options: ["Meri Zindigi", "My Starfish", "Forever?", "I'm blushing"] },
-
-        { text: "I'll never ignore you again. I'll be the best boyfriend ever. No more starfish moments, I promise!", bg: "https://images.unsplash.com/photo-1516589174184-c685eb3df123?w=1200", 
-          options: ["Better be", "I'll hold you to it", "Pinky promise?", "We'll see"] },
-
-        { text: "I'm counting down the seconds until I can hold you. You're my heart, my soul, my everything.", bg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200", 
-          options: ["Me too", "Hurry up", "Wait for me", "I love you"] },
-
-        { text: "We're almost at the end... are you ready for the big question?", bg: "https://images.unsplash.com/photo-1430931071372-38127bd472b8?w=1200", 
-          options: ["Yes!", "Wait!", "I'm nervous", "Ready"] },
-
-        { text: "Do you forgive me, mera dil?", bg: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200", 
-          isFinal: true,
-          options: ["Yes", "No", "Definitely Yes", "Yes, Baby Girl"] }
+        { text: "Tanisha... Meri Jaan... are you really mad at your favorite dumb idiot? I've been a total starfish lately.", bg: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200", options: ["Open the message", "Call him a dumb idiot", "Sigh and listen", "Open it just to bully him"] },
+        { text: "I know I messed up and I'm a complete dumbass idiot for that. ap Mera Dil hai, you deserve 100% of me.", bg: "https://images.unsplash.com/photo-1516339901600-2e1a62dc0c45?w=1200", options: ["Damn right I do", "Say 'I'm a starfish'", "You're lucky you're mine", "You're still an idiot"] },
+        { text: "How is my Lil Penguin doing? Did you know you're the most beautiful girl in the world even when you're mad?", bg: "https://images.unsplash.com/photo-1507502707541-f369a3b18502?w=1200", options: ["I know I am", "Stop flirting, dumbass", "Keep going...", "Maybe a little bit"] },
+        { text: "I miss you calling me baby. My life is boring without my Lil Baby Girl bossing me around.", bg: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200", options: ["I'm the boss forever", "I miss you too", "Shut up, starfish", "Pay attention then"] },
+        { text: "Remember our first memory? I realised then that you were My everything. My Sab Kuch.", bg: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?w=1200", options: ["That was sweet", "You're a dumb idiot", "I remember", "My Sab Kuch"] },
+        { text: "I'm a dumb idiot, but I'm YOUR dumb idiot. Can we make a deal to never be mad for long?", bg: "https://images.unsplash.com/photo-1535905590362-38751f1515df?w=1200", options: ["Deal", "Maybe if you're good", "10 minute limit", "I'll think about it"] },
+        { text: "If I could, I'd fly us to Paris right now just to see you smile. Would you let me hold your hand?", bg: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200", options: ["Yes, please", "Maybe in Paris", "Hold it now", "Quiet, starfish"] },
+        { text: "Next stop: Italy! We'd eat pizza and I'd stare at you the whole time like a crazy person.", bg: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=1200", options: ["That's creepy lol", "I love pizza", "Stare at me more", "Take me there!"] },
+        { text: "Then Tokyo! We'd see the neon lights, but you'd be the brightest thing there, Meri Jaan.", bg: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=1200", options: ["Smooth...", "I love Tokyo", "Buy me everything", "You're so cheesy"] },
+        { text: "We'd travel the whole world together. Every country, every city, as long as I'm with my Lil Penguin.", bg: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200", options: ["Everywhere?", "Promise?", "Just us two", "Pack your bags"] },
+        { text: "Halfway mark! You've been so patient with this starfish. Do you like this surprise so far?", bg: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200", options: ["I love it", "It's okay", "You're trying", "Best surprise ever"] },
+        { text: "I stare at your pictures and literally forget how to breathe. I'm such a dumb idiot for you.", bg: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1200", options: ["Don't die lol", "Aww baby", "I do that too", "Keep breathing!"] },
+        { text: "You're my perfect girl. Everything about you—your smile, your laugh, your sass—is my favorite.", bg: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200", options: ["Even the sass?", "Tell me more", "I'm the best", "Love you too"] },
+        { text: "What's one thing you want to do with your Starfishy as soon as you see him?", bg: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200", options: ["Giant hug", "Big kiss", "Smack you", "Eat food"] },
+        { text: "I promise to always be your protector. No one messes with my Lil Baby Girl. Ever.", bg: "https://images.unsplash.com/photo-1505481710153-605175282460?w=1200", options: ["My hero", "So brave", "I'm tough too", "Protect me always"] },
+        { text: "You are my Sab Kuch. My world starts and ends with you, Tanisha.", bg: "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=1200", options: ["Meri Zindigi", "My Starfish", "Forever?", "I'm blushing"] },
+        { text: "I'll never ignore you again. I'll be the best boyfriend ever. No more starfish moments, I promise!", bg: "https://images.unsplash.com/photo-1516589174184-c685eb3df123?w=1200", options: ["Better be", "I'll hold you to it", "Pinky promise?", "We'll see"] },
+        { text: "I'm counting down the seconds until I can hold you. You're my heart, my soul, my everything.", bg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200", options: ["Me too", "Hurry up", "Wait for me", "I love you"] },
+        { text: "We're almost at the end... are you ready for the big question?", bg: "https://images.unsplash.com/photo-1430931071372-38127bd472b8?w=1200", options: ["Yes!", "Wait!", "I'm nervous", "Ready"] },
+        { text: "Do you forgive me, mera dil?", bg: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200", isFinal: true, options: ["Yes", "No", "Definitely Yes", "Yes, Baby Girl"] }
     ];
 
     const textEl = document.getElementById('text-content');
     const optionsEl = document.getElementById('options-grid');
     const bgEl = document.getElementById('bg-layer');
 
+    function createFlower() {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.animationDelay = Math.random() * 5 + 's';
+        document.body.appendChild(flower);
+        setTimeout(() => { flower.remove(); }, 8000);
+    }
+    setInterval(createFlower, 400);
+
     function typeWriter(text, i, cb) {
         if (i < text.length) {
             textEl.innerHTML += text.charAt(i);
-            setTimeout(() => typeWriter(text, i + 1, cb), 40);
+            setTimeout(() => typeWriter(text, i + 1, cb), 50);
         } else if (cb) { cb(); }
     }
 
@@ -250,7 +185,6 @@
         const act = gameData[idx];
         textEl.innerHTML = "";
         optionsEl.innerHTML = "";
-        // Keep backgrounds blurred and dark so text is readable
         bgEl.style.backgroundImage = `url('${act.bg}')`;
 
         typeWriter(act.text, 0, () => {
